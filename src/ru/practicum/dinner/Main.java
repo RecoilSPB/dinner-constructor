@@ -1,5 +1,7 @@
 package ru.practicum.dinner;
 
+import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
@@ -36,13 +38,19 @@ public class Main {
     }
 
     private static void addNewDish() {
+//        initMock();
+
         System.out.println("Введите тип блюда:");
         String dishType = scanner.nextLine();
         System.out.println("Введите название блюда:");
         String dishName = scanner.nextLine();
 
-        // добавьте новое блюдо
+        ArrayList<String> dish = dc.getDishByType(dishType);
+        dish.add(dishName);
+        dc.menuDishes.put(dishType, dish);// добавьте новое блюдо
     }
+
+
 
     private static void generateDishCombo() {
         System.out.println("Начинаем конструировать обед...");
@@ -52,14 +60,32 @@ public class Main {
         scanner.nextLine();
 
         System.out.println("Вводите типы блюда, разделяя символом переноса строки (enter). Для завершения ввода введите пустую строку");
-        String nextItem = scanner.nextLine();
+        ArrayList<String> selectedDishTypes = new ArrayList<>();
 
-        //реализуйте ввод типов блюд
-        while (!nextItem.isEmpty()) {
-
+        // Ввод типов блюд
+        while (true) {
+            String dishType = scanner.nextLine();
+            if (dishType.isEmpty()) {
+                break;
+            }
+            if (!dc.checkType(dishType)) {
+                System.out.println("Такого типа блюда не существует. Пожалуйста, введите другой тип:");
+                continue;
+            }
+            selectedDishTypes.add(dishType);
         }
 
-        // сгенерируйте комбинации блюд и выведите на экран
-
+        Random random = new Random();
+        // Генерация комбинаций блюд и вывод на экран
+        for (int i = 0; i < numberOfCombos; i++) {
+            ArrayList<String> combo = new ArrayList<>();
+            System.out.println("Комбо " + (i + 1));
+            for (String dishType : selectedDishTypes) {
+                ArrayList<String> dishes = dc.getDishByType(dishType);
+                String randomDish = dishes.get(random.nextInt(dishes.size()));
+                combo.add(randomDish);
+            }
+            System.out.println(combo);
+        }
     }
 }
