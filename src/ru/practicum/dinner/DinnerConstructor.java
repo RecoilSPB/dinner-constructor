@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DinnerConstructor {
-    HashMap<String, ArrayList<String>> menuDishes;
+    final HashMap<String, ArrayList<String>> menuDishes;
 
     DinnerConstructor(){
         menuDishes = new HashMap<>();
